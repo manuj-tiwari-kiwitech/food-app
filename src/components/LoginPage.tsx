@@ -13,14 +13,19 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const [loading, setLoading] = useState(false);
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const user = await signInWithEmailAndPassword(email, password);
       dispatch(login(user));
       navigate('/');
+      if(user) {
+        setLoading(false);
+      }
     } catch (error:any) {
       setError(error.message);
     }
@@ -53,7 +58,7 @@ const LoginPage: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <Typography variant="body2" color="error" style={{ marginBottom: '10px' }}>{error}</Typography>}
-        <Button variant="contained" color="primary" onClick={handleLogin}>
+        <Button disabled={loading} variant="contained" color="primary" onClick={handleLogin}>
           Login
         </Button>
       </div>

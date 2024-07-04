@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { recipes } from '../constants/recipes';
 import { selectShortlistItems } from '../features/shortlist/shortlistSelectors';
 import { RootState } from '../app/store';
@@ -35,6 +35,12 @@ const HomePage: React.FC = (props:any) => {
   // });
 
   // console.log(data, 'apiData')
+
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
+
+  if(!isAuthenticated) {
+    return <Navigate to='/login' />
+  }
 
   // if (loading) {
   //   return <div>Loading...</div>;

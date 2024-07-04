@@ -6,7 +6,7 @@ import { Recipe } from '../types/Recipe';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { RecipeCard } from './RecipeCard';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import AppNavbar from './AppBar';
 
 const Shortlist: React.FC = () => {
@@ -16,6 +16,12 @@ const Shortlist: React.FC = () => {
   const handleRemove = (id: string) => {
     dispatch(removeItem(id));
   };
+
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
+
+  if(!isAuthenticated) {
+    return <Navigate to='/login' />
+  }
 
   return (
     <div style={{ height: '100%' }}>

@@ -6,6 +6,7 @@ import { Grid, Typography, IconButton, Card, CardContent, CardMedia, Button, Con
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AppNavbar from './AppBar';
+import { Navigate } from 'react-router-dom';
 
 const CartPage: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -24,6 +25,12 @@ const CartPage: React.FC = () => {
   const deliveryCharge = 5; // delivery charge
 
   const total = subtotal + taxes + deliveryCharge;
+
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
+
+  if(!isAuthenticated) {
+    return <Navigate to='/login' />
+  }
 
   return (
     <div style={{ height: '100%' }}>
