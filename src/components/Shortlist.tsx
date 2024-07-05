@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectShortlistItems, removeItem } from '../features/shortlist/shortlistSlice';
 import { Typography, Grid, IconButton, Container, AppBar, Toolbar, Badge } from '@mui/material';
 import { Recipe } from '../types/Recipe';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { RecipeCard } from './RecipeCard';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Link, Navigate } from 'react-router-dom';
 import AppNavbar from './AppBar';
 
@@ -33,7 +31,6 @@ const Shortlist: React.FC = () => {
           <Grid item key={item.id} xs={12} sm={6} md={4}>
             <RecipeCard recipe={item} isShortlisted={true} />
             <IconButton onClick={() => handleRemove(item.id)}>
-              {/* <DeleteIcon /> */}
             </IconButton>
           </Grid>
         ))}

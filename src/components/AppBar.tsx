@@ -13,9 +13,7 @@ const AppNavbar: React.FC = () => {
     const dispatch = useDispatch();
 
     const handleLogout = () => {
-        // Assuming you have a logout action defined in your authSlice
         dispatch(logout());
-        // Redirect to login page or another appropriate route
         navigate('/login');
     };
     return(

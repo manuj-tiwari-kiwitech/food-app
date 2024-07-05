@@ -1,5 +1,3 @@
-// src/components/RecipeCard.tsx
-
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart, selectCartItems } from '../features/cart/cartSlice';
