@@ -22,9 +22,9 @@ const Shortlist: React.FC = () => {
   }
 
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: '90%' }}>
       <AppNavbar />
-      <Container style={{ height: 'calc(100% - 70px)', overflow: 'auto' }}>
+      <Container style={{ height: 'calc(100% - 40px)', overflow: 'auto' }}>
       <Typography sx={{ py: 2, pb: 3 }} variant="h4">Shortlisted Recipes</Typography>
       <Grid container spacing={2}>
         {shortlistItems.map((item: Recipe) => (

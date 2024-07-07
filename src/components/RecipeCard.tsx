@@ -38,17 +38,34 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isShortlisted })
     }
   };
 
+  const getUrl = (image: string) => {
+    let newImg = image;
+
+    try {
+        if (image.includes('[')) {
+            const parsedArray = JSON.parse(image);
+            if (Array.isArray(parsedArray)) {
+                newImg = parsedArray[0];
+            }
+        }
+    } catch (error) {
+        console.error('Error parsing image URL:', error);
+    }
+
+    return newImg;
+}
+
   return (
     <Card>
       <CardMedia
         component="img"
-        height="140"
-        image={recipe.image}
-        alt={recipe.name}
+        height="400"
+        image={getUrl(recipe.images[0])}
+        alt={recipe.title}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {recipe.name}
+        <Typography style={{ height: '65px' }} gutterBottom variant="h5" component="div">
+          {recipe.title}
         </Typography>
         <Tooltip title={recipe.description} arrow>
           <Typography

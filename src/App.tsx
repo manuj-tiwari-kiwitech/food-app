@@ -13,22 +13,17 @@ import store, { RootState } from './app/store';
 
 const App: React.FC = () => {
 
-  const isAuthenticated = localStorage.getItem('isAuthenticated');
-  
   return (
     <Provider store={store}>
         <Container sx={{ height: '100%', maxWidth: 'unset !important', padding: '0 !important' }}>
-          {isAuthenticated ? 
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/shortlist" element={<Shortlist />} />
-          </Routes>:
+          </Routes>
           <Routes>
-          <Route path="/login" element={<LoginPage />} />
         </Routes>
-          }
         </Container>
       </Provider>
   );

@@ -1,11 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../app/store';
-import { addToCart, removeFromCart } from '../features/cart/cartSlice';
+import { addToCart, clearCart, removeFromCart, removeItemFromCart } from '../features/cart/cartSlice';
 import { Grid, Typography, IconButton, Card, CardContent, CardMedia, Button, Container } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AppNavbar from './AppBar';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Navigate } from 'react-router-dom';
 
 const CartPage: React.FC = () => {
@@ -14,6 +15,10 @@ const CartPage: React.FC = () => {
 
   const handleRemove = (id: string) => {
     dispatch(removeFromCart(id));
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
   };
 
   const calculateSubtotal = () => {
@@ -28,33 +33,36 @@ const CartPage: React.FC = () => {
 
   const isAuthenticated = localStorage.getItem('isAuthenticated');
 
-  if(!isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to='/login' />
   }
 
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: '90%' }}>
       <AppNavbar />
-      <Container style={{ height: 'calc(100% - 70px)', overflow: 'auto' }}>
+      <Container style={{ height: 'calc(100% - 40px)', overflow: 'auto' }}>
         <Grid sx={{ mt: 3 }} container spacing={3}>
           {/* Left Section: List of Meals */}
           <Grid item xs={12} md={8}>
+            <Grid mb={4} sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h4" style={{ marginBottom: '20px' }}>Cart</Typography>
+            <Button onClick={handleClearCart} variant="outlined" style={{ marginBottom: '20px' }}>Clear Cart</Button>
+            </Grid>
             {cartItems.length === 0 ? (
               <Typography variant="body1">Your cart is empty.</Typography>
             ) : (
               cartItems.map(item => (
-                <Card key={item.recipe.id} style={{ display: 'flex', marginBottom: '10px' }}>
+                <Card key={item.recipe.id} style={{ display: 'flex', position: 'relative', marginBottom: '30px' }}>
                   <CardMedia
                     component="img"
                     height="140"
-                    image={item.recipe.image}
-                    alt={item.recipe.name}
+                    image={item.recipe.images[0]}
+                    alt={item.recipe.title}
                     style={{ width: '140px', objectFit: 'cover' }}
                   />
                   <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%' }}>
                     <CardContent>
-                      <Typography variant="h6">{item.recipe.name}</Typography>
+                      <Typography variant="h6">{item.recipe.title}</Typography>
                       <Typography variant="body1">Price: ${item.recipe.price?.toFixed(2)}</Typography>
                       <Typography variant="body1">Quantity: {item.quantity}</Typography>
                     </CardContent>
@@ -64,6 +72,12 @@ const CartPage: React.FC = () => {
                       </IconButton>
                       <IconButton onClick={() => dispatch(addToCart(item.recipe))}>
                         <AddIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => dispatch(removeItemFromCart(item.recipe.id))}
+                        style={{ position: 'absolute', top: '10px', right: '10px' }}
+                      >
+                        <DeleteIcon />
                       </IconButton>
                     </div>
                   </div>

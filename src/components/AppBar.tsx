@@ -21,7 +21,7 @@ const AppNavbar: React.FC = () => {
         <Toolbar>
           <div style={{ flexGrow: 1, cursor: 'pointer' }} onClick={() => navigate('/')}>
           <Typography variant="h6">
-            Food Order App
+            MegaKart
           </Typography>
           </div>
           <Link to="/cart">
