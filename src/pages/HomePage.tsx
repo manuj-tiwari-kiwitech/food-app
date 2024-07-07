@@ -48,7 +48,6 @@ const HomePage: React.FC = (props: any) => {
     if (container) {
       const { scrollTop, clientHeight, scrollHeight } = container;
 
-      console.log(scrollTop + clientHeight, scrollHeight, 'scrollHeight')
       if (scrollTop + clientHeight >= scrollHeight - 20) { 
         setOffset(prevOffset => prevOffset + 10);
       }
@@ -58,14 +57,6 @@ const HomePage: React.FC = (props: any) => {
   if (!isAuthenticated) {
     return <Navigate to='/login' />
   }
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
 
   return (
     <div style={{ height: '90%' }}>
