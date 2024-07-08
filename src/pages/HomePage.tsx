@@ -41,6 +41,7 @@ const HomePage: React.FC = (props: any) => {
     // Reset offset and productItems when search term changes
     setOffset(0);
     setProductItems([]);
+    setHasMore(true)
   }, [searchTerm]);
 
   useEffect(() => {
