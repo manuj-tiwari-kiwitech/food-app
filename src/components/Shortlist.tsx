@@ -11,6 +11,7 @@ const Shortlist: React.FC = () => {
   const shortlistItems = useSelector(selectShortlistItems);
   const dispatch = useDispatch();
 
+  // Remove shortlisted Item
   const handleRemove = (id: string) => {
     dispatch(removeItem(id));
   };

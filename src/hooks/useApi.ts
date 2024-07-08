@@ -7,6 +7,8 @@ interface ApiResponse<T> {
   error: string | null;
 }
 
+// useApi is a hook to call all the APIs in the project dynamically
+
 const useApi = <T>(url: string, config?: AxiosRequestConfig): ApiResponse<T> => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

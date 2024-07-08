@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectShortlistItems } from '../features/shortlist/shortlistSlice';
 import { logout } from '../features/auth/authSlice';
 
+// AppNavar is Global Navigation bar that is shown on top of every page
+
 const AppNavbar: React.FC = () => {
     const shortlistItems = useSelector(selectShortlistItems);
     const navigate = useNavigate();

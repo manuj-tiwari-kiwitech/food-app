@@ -21,6 +21,7 @@ const HomePage: React.FC = (props: any) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated');
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Event handling for infinite scrolling using useRef
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
@@ -43,6 +44,7 @@ const HomePage: React.FC = (props: any) => {
       });
   }, [searchTerm, offset]);
 
+  // Function to handle infinite scrolling 
   const handleScroll = () => {
     const container = containerRef.current;
     if (container) {

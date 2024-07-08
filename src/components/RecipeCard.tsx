@@ -24,12 +24,14 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isShortlisted })
     dispatch(addToCart(recipe));
   };
 
+  // Function to remove items from cart
   const handleRemoveFromCart = () => {
     if (quantity > 0) {
       dispatch(removeFromCart(recipe.id));
     }
   };
 
+  // Function to shortlist unshortlist items from cart 
   const handleToggleShortlist = () => {
     if (isShortlisted) {
       dispatch(removeItem(recipe.id));
@@ -37,6 +39,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isShortlisted })
       dispatch(addItem(recipe));
     }
   };
+
+  //  Function to handle image URL from API data 
 
   const getUrl = (image: string) => {
     let newImg = image;

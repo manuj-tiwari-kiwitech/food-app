@@ -10,6 +10,7 @@ const ShortlistPage: React.FC = () => {
   const shortlistItems = useSelector(selectShortlistItems);
   const dispatch = useDispatch();
 
+  // Remove already shortlisted item
   const handleRemove = (id: string) => {
     dispatch(removeFromShortlist(id));
   };

@@ -17,6 +17,8 @@ const LoginPage: React.FC = () => {
   const isAuthenticated = localStorage.getItem('isAuthenticated');
   const navigate = useNavigate();
 
+  //  Function to handle user authentication
+
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -31,6 +33,7 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  // Check to navigate user to home if already authenticated 
   if(isAuthenticated) {
     return <Navigate to='/' />
   }

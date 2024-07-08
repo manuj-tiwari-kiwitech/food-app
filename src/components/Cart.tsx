@@ -13,13 +13,17 @@ const CartPage: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch();
 
+  // Function to remove a specific cart item
   const handleRemove = (id: string) => {
     dispatch(removeFromCart(id));
   };
 
+  // Function to clear all cart items
   const handleClearCart = () => {
     dispatch(clearCart());
   };
+
+  // Calculate subtotal of added cart items
 
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => total + item.quantity * item.recipe.price, 0);
