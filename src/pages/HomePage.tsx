@@ -14,6 +14,7 @@ const HomePage: React.FC = (props: any) => {
 
   const [productItems, setProductItems] = useState<Recipe[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
 
   const shortlistItems = useSelector((state: RootState) => selectShortlistItems(state));
@@ -23,14 +24,16 @@ const HomePage: React.FC = (props: any) => {
 
   // Event handling for infinite scrolling using useRef
   useEffect(() => {
-    const container = containerRef.current;
-    if (container && (!searchTerm || searchTerm.trim() === '')) {
+    if(searchTerm.trim() == '') {
+      const container = containerRef.current;
+    if (container) {
       container.addEventListener('scroll', handleScroll);
       return () => {
         container.removeEventListener('scroll', handleScroll);
       };
     }
-  }, []);
+    }
+  }, [searchTerm]);
 
   useEffect(() => {
     // Reset offset and productItems when search term changes
@@ -40,12 +43,14 @@ const HomePage: React.FC = (props: any) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (searchTerm.trim() === '') {
+      setLoading(true);
+      if (!searchTerm) {
         // If search term is empty, fetch all products
         const params = { offset, limit: 10 };
         try {
           const products = await getProducts(params);
           setProductItems(prevItems => [...prevItems, ...products]);
+          setLoading(false)
           console.log('Fetched products:', products);
         } catch (error) {
           console.error('Error fetching products:', error);
@@ -63,26 +68,24 @@ const HomePage: React.FC = (props: any) => {
       }
     };
 
-    if(searchTerm.trim() !== '' || !searchTerm) {
       fetchProducts();
-    }
   }, [searchTerm, offset]);
 
   console.log(searchTerm, 'searchterm')
 
   // Function to handle infinite scrolling 
   const handleScroll = () => {
-    const container = containerRef.current;
-    if (container && (searchTerm.trim() === '')) { // Only fetch more products if searchTerm is empty
+    if(searchTerm === '') {
+      console.log('inSearch')
+      const container = containerRef.current;
+    if (container) { // Only fetch more products if searchTerm is empty
       const { scrollTop, clientHeight, scrollHeight } = container;
-
       if (scrollTop + clientHeight >= scrollHeight - 20) { 
         setOffset(prevOffset => prevOffset + 10);
       }
     }
+    }
   };
-
-  console.log(productItems, 'producstr')
 
   if (!isAuthenticated) {
     return <Navigate to='/login' />
