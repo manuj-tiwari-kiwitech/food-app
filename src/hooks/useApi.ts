@@ -1,35 +1,32 @@
+// src/hooks/useApi.ts
+
 import { useState, useEffect } from 'react';
-import axios, { AxiosRequestConfig } from 'axios';
 
-interface ApiResponse<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | null;
-}
+type ApiFunction<TParams, TResponse> = (params: TParams) => Promise<TResponse>;
 
-// useApi is a hook to call all the APIs in the project dynamically
-
-const useApi = <T>(url: string, config?: AxiosRequestConfig): ApiResponse<T> => {
-  const [loading, setLoading] = useState(true);
+export const useApi = <TParams, TResponse>(
+  apiFunction: ApiFunction<TParams, TResponse>,
+  params: TParams
+) => {
+  const [data, setData] = useState<TResponse | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<T | null>(null); // Initialize with null to avoid check
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios(url, config);
-        setData(response.data); // Set data when successful
+    setLoading(true);
+    setError(null);
+    apiFunction(params)
+      .then(response => {
+        setData(response);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setError('Failed to fetch data');
+      })
+      .finally(() => {
         setLoading(false);
-      } catch (error) {
-        setError('Error fetching data');
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [url, config]);
+      });
+  }, [apiFunction, params]);
 
   return { data, loading, error };
 };
-
-export default useApi;
