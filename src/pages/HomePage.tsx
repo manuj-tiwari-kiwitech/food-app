@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { selectShortlistItems } from '../features/shortlist/shortlistSelectors';
 import { RootState } from '../app/store';
-import { Container, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Container, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import { RecipeCard } from '../components/RecipeCard';
 import AppNavbar from '../components/AppBar';
 import { getProducts } from '../services/apiService';
@@ -24,7 +24,7 @@ const HomePage: React.FC = (props: any) => {
   // Event handling for infinite scrolling using useRef
   useEffect(() => {
     const container = containerRef.current;
-    if (container) {
+    if (container && (!searchTerm || searchTerm.trim() === '')) {
       container.addEventListener('scroll', handleScroll);
       return () => {
         container.removeEventListener('scroll', handleScroll);
@@ -33,21 +33,47 @@ const HomePage: React.FC = (props: any) => {
   }, []);
 
   useEffect(() => {
-    const params = { title: searchTerm, offset: offset, limit: 10 }
-    getProducts(params)
-      .then(products => {
-        setProductItems(prevItems => ([...prevItems, ...products]));
-        console.log('Fetched products:', products);
-      })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-      });
+    // Reset offset and productItems when search term changes
+    setOffset(0);
+    setProductItems([]);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (searchTerm.trim() === '') {
+        // If search term is empty, fetch all products
+        const params = { offset, limit: 10 };
+        try {
+          const products = await getProducts(params);
+          setProductItems(prevItems => [...prevItems, ...products]);
+          console.log('Fetched products:', products);
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      } else {
+        // If search term is not empty, fetch products based on the search term
+        const params = { title: searchTerm, offset, limit: 10 };
+        try {
+          const products = await getProducts(params);
+          setProductItems(products); // Replace existing products with new search results
+          console.log('Fetched products:', products);
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      }
+    };
+
+    if(searchTerm.trim() !== '' || !searchTerm) {
+      fetchProducts();
+    }
   }, [searchTerm, offset]);
+
+  console.log(searchTerm, 'searchterm')
 
   // Function to handle infinite scrolling 
   const handleScroll = () => {
     const container = containerRef.current;
-    if (container) {
+    if (container && (searchTerm.trim() === '')) { // Only fetch more products if searchTerm is empty
       const { scrollTop, clientHeight, scrollHeight } = container;
 
       if (scrollTop + clientHeight >= scrollHeight - 20) { 
@@ -55,6 +81,8 @@ const HomePage: React.FC = (props: any) => {
       }
     }
   };
+
+  console.log(productItems, 'producstr')
 
   if (!isAuthenticated) {
     return <Navigate to='/login' />
@@ -83,14 +111,20 @@ const HomePage: React.FC = (props: any) => {
               }}
             />
           </Grid>
-          {productItems.map(recipe => (
-            <Grid item key={recipe.id} xs={12} sm={6} md={4}>
-              <RecipeCard
-                recipe={recipe}
-                isShortlisted={shortlistItems.some(item => item.id === recipe.id)}
-              />
+          {productItems.length === 0 ? (
+            <Grid item xs={12}>
+              <Typography variant="h6">No Data found.</Typography>
             </Grid>
-          ))}
+          ) : (
+            productItems.map(recipe => (
+              <Grid item key={recipe.id} xs={12} sm={6} md={4}>
+                <RecipeCard
+                  recipe={recipe}
+                  isShortlisted={shortlistItems.some(item => item.id === recipe.id)}
+                />
+              </Grid>
+            ))
+          )}
         </Grid>
       </Container>
     </div>

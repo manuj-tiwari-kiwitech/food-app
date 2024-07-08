@@ -68,9 +68,11 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isShortlisted })
         alt={recipe.title}
       />
       <CardContent>
-        <Typography style={{ height: '65px' }} gutterBottom variant="h5" component="div">
+      <Tooltip title={recipe.title} arrow>
+        <Typography style={{ height: '65px', lineClamp: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} gutterBottom variant="h5" component="div">
           {recipe.title}
         </Typography>
+        </Tooltip>
         <Tooltip title={recipe.description} arrow>
           <Typography
             variant="body2"
