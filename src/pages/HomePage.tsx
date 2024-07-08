@@ -17,6 +17,7 @@ const HomePage: React.FC = (props: any) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
   const shortlistItems = useSelector((state: RootState) => selectShortlistItems(state));
 
@@ -50,8 +51,14 @@ const HomePage: React.FC = (props: any) => {
         const params = { offset, limit: 10 };
         try {
           const products = await getProducts(params);
-          setProductItems(prevItems => [...prevItems, ...products]);
-          setLoading(false)
+          if (products.length === 0) {
+            // If no more products are returned, set hasMore to false
+            setHasMore(false);
+            setLoading(false)
+          } else {
+            setProductItems(prevItems => [...prevItems, ...products]);
+            setLoading(false)
+          }
           console.log('Fetched products:', products);
         } catch (error) {
           console.error('Error fetching products:', error);
@@ -62,6 +69,7 @@ const HomePage: React.FC = (props: any) => {
         try {
           const products = await getProducts(params);
           setProductItems(products); // Replace existing products with new search results
+          setLoading(false)
           console.log('Fetched products:', products);
         } catch (error) {
           console.error('Error fetching products:', error);
@@ -69,17 +77,19 @@ const HomePage: React.FC = (props: any) => {
       }
     };
 
-      fetchProducts();
+      if(hasMore) {
+        fetchProducts();
+      }
   }, [searchTerm, offset]);
 
   console.log(searchTerm, 'searchterm')
 
   // Function to handle infinite scrolling 
   const handleScroll = () => {
-    if(searchTerm === '') {
+    if(searchTerm === '' && hasMore) {
       console.log('inSearch')
       const container = containerRef.current;
-    if (container) { // Only fetch more products if searchTerm is empty
+    if (container) { 
       const { scrollTop, clientHeight, scrollHeight } = container;
       if (scrollTop + clientHeight >= scrollHeight - 20) { 
         setOffset(prevOffset => prevOffset + 10);
