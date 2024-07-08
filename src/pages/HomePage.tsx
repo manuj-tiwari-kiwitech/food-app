@@ -9,6 +9,7 @@ import AppNavbar from '../components/AppBar';
 import { getProducts } from '../services/apiService';
 import { Recipe } from '../types/Recipe';
 import SearchOutlined from '@mui/icons-material/SearchOutlined'
+import { Loader } from '../common/loader';
 
 const HomePage: React.FC = (props: any) => {
 
@@ -95,6 +96,7 @@ const HomePage: React.FC = (props: any) => {
     <div style={{ height: '90%' }}>
       <AppNavbar />
       <Container ref={containerRef}  style={{ height: 'calc(100% - 40px)', overflow: 'auto' }}>
+      {loading && <Loader />}
         <Grid container spacing={4} style={{ marginTop: '20px' }}>
         <Grid item xs={12}>
             <TextField

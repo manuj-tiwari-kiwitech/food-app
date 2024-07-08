@@ -12,7 +12,7 @@ export const Loader: React.FC = () => {
             </linearGradient>
           </defs>
         </svg>
-        <CircularProgress sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+        <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }} sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
       </React.Fragment>
     );
   }
