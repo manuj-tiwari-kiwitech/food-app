@@ -127,7 +127,7 @@ const HomePage: React.FC = (props: any) => {
               }}
             />
           </Grid>
-          {productItems.length === 0 ? (
+          {!loading && productItems.length === 0 ? (
             <Grid item xs={12}>
               <Typography variant="h6">No Data found.</Typography>
             </Grid>
