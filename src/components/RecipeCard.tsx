@@ -44,27 +44,34 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isShortlisted })
 
   const getUrl = (image: string) => {
     let newImg = image;
-
+  
     try {
-        if (image.includes('[')) {
-            const parsedArray = JSON.parse(image);
-            if (Array.isArray(parsedArray)) {
-                newImg = parsedArray[0];
-            }
+      // Check if the image string contains '[' which indicates an array
+      if (image.includes('[')) {
+        // Remove any leading or trailing quotes and brackets
+        const cleanedImage = image.replace(/(^[\[\"]+|[\]\"]+$)/g, '');
+        const parsedArray = JSON.parse(`[${cleanedImage}]`);
+        if (Array.isArray(parsedArray)) {
+          newImg = parsedArray[0];
         }
+      } else if (image.includes('\"')) {
+        // If the image string contains only quotes, remove them
+        newImg = image.replace(/\"/g, '');
+      }
     } catch (error) {
-        console.error('Error parsing image URL:', error);
+      console.error('Error parsing image URL:', error);
     }
-
+    console.log(newImg, 'newImgnewImg')
+  
     return newImg;
-}
+  }
 
   return (
     <Card>
       <CardMedia
         component="img"
         height="400"
-        image={getUrl(recipe.images[0])}
+        image={getUrl(recipe.images[1])}
         alt={recipe.title}
       />
       <CardContent>
