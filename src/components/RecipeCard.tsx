@@ -95,6 +95,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isShortlisted })
             {recipe.description}
           </Typography>
         </Tooltip>
+        <Typography variant="h6" color="text.primary" style={{ marginTop: '10px' }}>
+          ${recipe.price.toFixed(2)}
+        </Typography>
       </CardContent>
       <CardActions>
         <IconButton onClick={handleAddToCart}>
