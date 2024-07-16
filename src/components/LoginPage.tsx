@@ -83,7 +83,7 @@ const LoginPage: React.FC = () => {
           }}
         />
         {error && <Typography variant="body2" color="error" style={{ marginBottom: '10px' }}>{error}</Typography>}
-        <Button disabled={loading} variant="contained" color="primary" onClick={handleLogin}>
+        <Button disabled={loading || !password || !email} variant="contained" color="primary" onClick={handleLogin}>
           Login
         </Button>
       </div>
