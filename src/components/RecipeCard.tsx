@@ -96,7 +96,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isShortlisted })
           </Typography>
         </Tooltip>
         <Typography variant="h6" color="text.primary" style={{ marginTop: '10px' }}>
-          ${recipe.price.toFixed(2)}
+          $ {recipe.price.toFixed(2)}
         </Typography>
       </CardContent>
       <CardActions>
