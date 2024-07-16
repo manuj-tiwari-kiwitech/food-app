@@ -5,6 +5,7 @@ import { selectShortlistItems } from '../features/shortlist/shortlistSelectors';
 import { RootState } from '../app/store';
 import { Box, Button, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@mui/material';
 import { RecipeCard } from '../components/RecipeCard';
+import { useMediaQuery, useTheme } from '@mui/material';
 import AppNavbar from '../components/AppBar';
 import { getProducts } from '../services/apiService';
 import { Recipe } from '../types/Recipe';
@@ -14,6 +15,9 @@ import { Loader } from '../common/loader';
 let limit = 10;
 
 const HomePage: React.FC = (props: any) => {
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [productItems, setProductItems] = useState<Recipe[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -152,10 +156,10 @@ const HomePage: React.FC = (props: any) => {
   return (
     <div style={{ height: '90%' }}>
       <AppNavbar />
-      <Container ref={containerRef} style={{ margin: 0, maxWidth: 'none',paddingLeft: 0, height: 'calc(100% - 40px)', overflow: 'auto', display: 'flex' }}>
+      <Container ref={containerRef} style={{ margin: 0, maxWidth: 'none',paddingLeft: isMobile ? '15px' : 0, height: 'calc(100% - 40px)', overflow: 'auto', display: 'flex' }}>
         {loading && <Loader />}
         <Grid container style={{ marginTop: '20px' }}>
-          <Grid item xs={12} sm={3} md={2.3} style={{ position: 'sticky', top: '20px', height: '100vh', paddingRight: '20px', paddingLeft: '15px' }}>
+          {!isMobile && <Grid item xs={12} sm={3} md={2.3} style={{ position: 'sticky', top: '20px', height: '100vh', paddingRight: '20px', paddingLeft: '15px' }}>
             <Box p={2} style={{ border: '1px solid #ddd', borderRadius: '8px', height: '100vh', padding: '20px' }}>
               <Typography variant="h6">Filters</Typography>
               <Typography variant="subtitle1">Price Range</Typography>
@@ -169,7 +173,7 @@ const HomePage: React.FC = (props: any) => {
               />
               <Typography variant="body2">Range: ${minPrice} - ${maxPrice}</Typography>
             </Box>
-          </Grid>
+          </Grid>}
           <Grid item xs={12} sm={9} md={9.7}>
             <Grid container spacing={4}>
               <Grid item xs={6}>
